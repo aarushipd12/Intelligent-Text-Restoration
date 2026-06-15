@@ -1,73 +1,157 @@
-# Restormer-LLM: Intelligent Text Restoration
 
-A multi-stage signal processing framework leveraging Restoration Transformers and LLMs for high-fidelity text recovery from degraded imagery. This project addresses the limitations of standard CNNs and Transformers in processing high-resolution, motion-blurred text images.
+<div align="center">
 
----
+#  Restormer-LLM: Intelligent Text Restoration
 
-## Overview
+[![Python](https://img.shields.io/badge/Python-3.8+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
+[![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)](https://pytorch.org)
+[![HuggingFace](https://img.shields.io/badge/🤗_Weights-HuggingFace-FFD21E?style=for-the-badge)](https://huggingface.co/VaishV/RestormerForTextDeblurring)
+[![Groq](https://img.shields.io/badge/LLM-Groq_Llama_3.3_70B-F55036?style=for-the-badge)](https://groq.com)
+[![License: MIT](https://img.shields.io/badge/License-MIT-22C55E?style=for-the-badge)](LICENSE)
 
-High-frequency textual details are often lost due to motion blur and camera shake, rendering traditional OCR engines ineffective, as they rely on pixel-perfect edges. Our pipeline restores these signals through three specialized layers:
+### A 3-stage AI pipeline that recovers readable text from motion-blurred images —<br>combining Restoration Transformers, OCR, and LLM-based semantic refinement.
 
-- **Deblur** — Implements the Restormer architecture to restore high-frequency textual signals.
-- **Digitize** — Extracts raw text via a high-precision Tesseract OCR layer.
-- **Refine** — Leverages the Groq LLM (Llama 3.3 70B) to semantically correct and polish the output while preserving original structure.
+<--demo-->
 
----
-
-## Architecture & Technical Novelty
-
-Our implementation utilizes a multiscale hierarchical design with efficient Transformer blocks.
-
-### Core Components
-
-#### Multi-Dconv Head Transposed Attention (MDTA)
-
-Unlike standard self-attention with O(H²W²) complexity, MDTA operates across the channel dimension to achieve linear complexity, making it ideal for high-resolution images.
-
-#### Gated-Dconv Feed-Forward Network (GDFN)
-
-Enhances the standard FFN by adding a gating mechanism for selective information flow and depthwise convolutions for spatial awareness of edges and textures.
+</div>
 
 ---
 
-## Getting Started
+##  The Problem
+
+Motion blur and camera shake destroy the **high-frequency edge information** that OCR engines depend on. Standard CNNs smooth over fine details; standard Vision Transformers scale at **O(H²W²)** complexity — making them impractical for high-resolution text images. Neither approach reliably restores blurred text for downstream extraction.
+
+---
+
+##  Pipeline Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                        INPUT: Blurred Image                     │
+└───────────────────────────────┬─────────────────────────────────┘
+                                │
+                                ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  STAGE 1 — Restormer Deblur                                     │
+│                                                                 │
+│  • MDTA: channel-wise attention → linear complexity O(HW·C²)   │
+│  • GDFN: gated depthwise convolutions for edge/texture detail  │
+│  • Multiscale hierarchical encoder-decoder with skip connects  │
+│                                                                 │
+│  Weights: VaishV/RestormerForTextDeblurring (HuggingFace)      │
+└───────────────────────────────┬─────────────────────────────────┘
+                                │  Restored Image
+                                ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  STAGE 2 — Tesseract OCR                                        │
+│                                                                 │
+│  • High-precision text extraction on restored pixel data       │
+│  • Images preprocessed: normalized + padded to 8×8 multiples  │
+└───────────────────────────────┬─────────────────────────────────┘
+                                │  Raw OCR Text
+                                ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  STAGE 3 — Groq LLM Semantic Refinement                         │
+│                                                                 │
+│  • Llama 3.3 70B corrects OCR errors contextually              │
+│  • Recovers word meaning even when pixel restoration is noisy  │
+│  • Structure-preserving: maintains original text layout        │
+└───────────────────────────────┬─────────────────────────────────┘
+                                │
+                                ▼
+                      Clean, Readable Text
+```
+
+---
+
+##  Key Technical Contributions
+
+### Multi-Dconv Head Transposed Attention (MDTA)
+Standard self-attention computes similarity across spatial tokens — **O(H²W²)** for an image of height H and width W, making it infeasible at high resolutions. MDTA instead operates across the **channel dimension**, achieving **linear complexity** while still capturing long-range dependencies critical for blur removal.
+
+### Gated-Dconv Feed-Forward Network (GDFN)
+Replaces the standard FFN with a **learned gating mechanism** that selectively suppresses irrelevant features, combined with **depthwise convolutions** for local spatial awareness of edges and fine textures — the exact features needed for text deblurring.
+
+### LLM Semantic Correction Layer
+Even after strong deblurring, OCR output on imperfectly restored images often contains plausible-but-wrong characters (*"rn"* vs *"m"*, *"cl"* vs *"d"*). A Groq-hosted **Llama 3.3 70B** pass resolves these contextually, recovering intended meaning at the semantic level rather than the pixel level.
+
+---
+
+##  Results
+
+| | Blurred Input | Restored Output |
+|---|---|---|
+| **Image** | *(blurred image here)* | *(restored image here)* |
+| **OCR Text** | ` ` | ` ` |
+
+>  *before/after image pairs to `assets/results/` and embed here.*
+
+---
+
+##  Quick Start
 
 ### Prerequisites
-
-- Python 3.x
-- Tesseract OCR engine
-- Groq API Key (for the LLM refinement layer)
+- Python 3.8+
+- [Tesseract OCR](https://github.com/tesseract-ocr/tesseract) installed on your system
+- A [Groq API key](https://console.groq.com) (free tier available)
 
 ### Installation
 
 ```bash
-git clone https://github.com/aarushipd12/Restormer-ML-in-Signal-Processing.git
-cd Restormer-ML-in-Signal-Processing
+git clone https://github.com/aarushipd12/Intelligent-Text-Restoration.git
+cd Intelligent-Text-Restoration
 pip install -r requirements.txt
+```
+
+### Running the Pipeline
+
+> The project is designed to run in **Google Colab** for GPU access.
+
+1. Open `Image_Deblurring_&_Text_Extraction_Pipeline.ipynb` in Colab
+2. Add your `GROQ_API_KEY` when prompted
+3. Upload a motion-blurred image
+4. The pipeline automatically runs all 3 stages end-to-end
+
+---
+
+##  Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Deblurring Model | Restormer (CVPR 2022) via HuggingFace |
+| OCR | Tesseract + pytesseract |
+| LLM Refinement | Groq API — Llama 3.3 70B |
+| Framework | PyTorch |
+| Image Processing | OpenCV, PIL |
+| Environment | Google Colab (GPU) |
+
+---
+
+##  Repository Structure
+
+```
+Intelligent-Text-Restoration/
+├── Image_Deblurring_&_Text_Extraction_Pipeline.ipynb  # Full inference pipeline
+├── RESTORMER_Training.ipynb                            # Model training notebook
+├── assets/                                             # Demo GIFs, result images
+│   └── results/
+│       ├── blurred_input.png
+│       └── restored_output.png
+└── README.md
 ```
 
 ---
 
-## Running the Pipeline
+##  References
 
-> **Note:** The project is designed to run in a Google Colab environment.
+- [Restormer: Efficient Transformer for High-Resolution Image Restoration](https://arxiv.org/abs/2111.09881) — Zamir et al., CVPR 2022
+- Pre-trained weights: [`VaishV/RestormerForTextDeblurring`](https://huggingface.co/VaishV/RestormerForTextDeblurring) on HuggingFace
+- [Groq API](https://console.groq.com) — Llama 3.3 70B inference
 
-### Step 1 — Preprocessing
+---
 
-Images are normalized and padded to `8×8` multiples.
+<div align="center">
 
-### Step 2 — Model Inference
+Aarushi Pandey | IIT Indore
 
-Load the pre-trained weights from HuggingFace:
-
-```
-VaishV/RestormerForTextDeblurring
-```
-
-### Step 3 — Execution
-
-Upload your blurred image. The pipeline will automatically:
-
-1. **Deblur** the image using Restormer
-2. **Extract** text using `pytesseract`
-3. **Refine** the extracted text using Groq LLM
+</div>

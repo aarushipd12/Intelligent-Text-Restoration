@@ -82,12 +82,7 @@ Even after strong deblurring, OCR output on imperfectly restored images often co
 | | Blurred Input | Restored Output |
 |---|---|---|
 | **Image** | * <img width="510" height="392" alt="image" src="https://github.com/user-attachments/assets/19db9a03-58da-4201-a42a-7637bbc69535" />* | * <img width="515" height="380" alt="image" src="https://github.com/user-attachments/assets/ffcf2ff3-86e8-4cac-9828-c828fbd0fc47" /> * |
-| **OCR Text** | ` ` | `'y the time-scale on which we b
-er 100 sites) is greater than the
-‘er duplication [5S, 6]. Second, 
-set of residues and can not be
-
-mn of non-synonymous change  ` |
+| **OCR Text** | ` ` | `'y the time-scale on which we b er 100 sites) is greater than the ‘er duplication [5S, 6]. Second,  set of residues and can not be mn of non-synonymous change  ` |
 
 >  *before/after image pairs to `assets/results/` and embed here.*
 

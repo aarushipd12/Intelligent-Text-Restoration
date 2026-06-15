@@ -34,28 +34,28 @@ Motion blur and camera shake destroy the **high-frequency edge information** tha
 ┌─────────────────────────────────────────────────────────────────┐
 │  STAGE 1 — Restormer Deblur                                     │
 │                                                                 │
-│  • MDTA: channel-wise attention → linear complexity O(HW·C²)   │
-│  • GDFN: gated depthwise convolutions for edge/texture detail  │
-│  • Multiscale hierarchical encoder-decoder with skip connects  │
+│  • MDTA: channel-wise attention → linear complexity O(HW·C²)    │
+│  • GDFN: gated depthwise convolutions for edge/texture detail   │
+│  • Multiscale hierarchical encoder-decoder with skip connects   │
 │                                                                 │
-│  Weights: VaishV/RestormerForTextDeblurring (HuggingFace)      │
+│  Weights: VaishV/RestormerForTextDeblurring (HuggingFace)       │
 └───────────────────────────────┬─────────────────────────────────┘
                                 │  Restored Image
                                 ▼
 ┌─────────────────────────────────────────────────────────────────┐
 │  STAGE 2 — Tesseract OCR                                        │
 │                                                                 │
-│  • High-precision text extraction on restored pixel data       │
-│  • Images preprocessed: normalized + padded to 8×8 multiples  │
+│  • High-precision text extraction on restored pixel data        │
+│  • Images preprocessed: normalized + padded to 8×8 multiples    │
 └───────────────────────────────┬─────────────────────────────────┘
                                 │  Raw OCR Text
                                 ▼
 ┌─────────────────────────────────────────────────────────────────┐
 │  STAGE 3 — Groq LLM Semantic Refinement                         │
 │                                                                 │
-│  • Llama 3.3 70B corrects OCR errors contextually              │
-│  • Recovers word meaning even when pixel restoration is noisy  │
-│  • Structure-preserving: maintains original text layout        │
+│  • Llama 3.3 70B corrects OCR errors contextually               │
+│  • Recovers word meaning even when pixel restoration is noisy   │
+│  • Structure-preserving: maintains original text layout         │
 └───────────────────────────────┬─────────────────────────────────┘
                                 │
                                 ▼
@@ -81,8 +81,15 @@ Even after strong deblurring, OCR output on imperfectly restored images often co
 
 | | Blurred Input | Restored Output |
 |---|---|---|
-| **Image** | *(blurred image here)* | *(restored image here)* |
-| **OCR Text** | ` ` | ` ` |
+| **Image** | * <img width="510" height="392" alt="image" src="https://github.com/user-attachments/assets/19db9a03-58da-4201-a42a-7637bbc69535" />
+* | * <img width="515" height="380" alt="image" src="https://github.com/user-attachments/assets/ffcf2ff3-86e8-4cac-9828-c828fbd0fc47" />
+* |
+| **OCR Text** | ` ` | `'y the time-scale on which we b
+er 100 sites) is greater than the
+‘er duplication [5S, 6]. Second, 
+set of residues and can not be
+
+mn of non-synonymous change  ` |
 
 >  *before/after image pairs to `assets/results/` and embed here.*
 

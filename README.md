@@ -212,7 +212,7 @@ Intelligent-Text-Restoration/
 ## Acknowledgements
 
 The Restormer fine-tuning and initial OCR pipeline were developed in collaboration 
-with [Vaish-Ventra]((https://github.com/Vaish-Ventra)) as part of a team project. .
+with [Vaish-Ventra](https://github.com/Vaish-Ventra) as part of a team project.
 
 <div align="center">
 

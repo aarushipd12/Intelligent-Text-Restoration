@@ -100,7 +100,7 @@ The model was trained for **55,000 iterations** on a subset (~5,500 sharp/blur i
 > **Achieved SSIM of 0.9470 is competitive with SOTA methods** on motion deblurring benchmarks (RealBlur-J, HIDE).  
 > PSNR reflects our custom text-focused dataset and single-GPU training constraints.
 
-### Why SSIM matters more here
+### Achieved SOTA SSIM value:
 Images can look visually very similar and preserve structure perfectly, yet differ slightly at the pixel level — SSIM captures this. PSNR penalizes every small pixel mismatch, making SSIM the more meaningful metric for perceptual text clarity.
 
 ### Comparison with SOTA (HIDE Dataset results — from original Restormer paper)

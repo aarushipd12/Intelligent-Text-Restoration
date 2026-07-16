@@ -11,7 +11,7 @@
 
 ### A 3-stage AI pipeline that recovers readable text from motion-blurred images —<br>combining Restoration Transformers, OCR, and LLM-based semantic refinement.
 
-[Website for Summary:](https://intelligent-text-restoration.lovable.app/)
+[Website Link](https://intelligent-text-restoration.lovable.app/)
 
 </div>
 
